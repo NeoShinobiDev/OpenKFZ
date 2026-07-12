@@ -1,126 +1,92 @@
-# OpenKFZ
 
-OpenKFZ is an open-source vehicle management platform designed to manage vehicle data, documents and automotive information in a modern and extensible way.
+---
 
-The goal of OpenKFZ is to provide a free and transparent platform for organizing vehicle-related information with a focus on privacy, modularity and community development.
+# Technologie
 
-## Features
+## Android
 
-🚗 Vehicle Management
+- Kotlin
+- Jetpack Compose
+- Android SDK
+- Gradle
 
-* Manage multiple vehicles
-* Store vehicle information and specifications
-* Organize automotive data
+## Geplant
 
-📄 Document Management
+OCR:
 
-* Manage important vehicle documents
-* Keep maintenance and vehicle history organized
+- OpenCV
+- Tesseract OCR
+- weitere Open-Source OCR Lösungen
 
-🔧 Modern Android Application
+Daten:
 
-* Built with Kotlin
-* Uses Jetpack Compose
-* Modern Android architecture
+- SQLite
+- lokale Dateien
+- strukturierte Fahrzeugdaten
 
-🔒 Open Source & Privacy Focused
+Kommunikation:
 
-* Licensed under GNU AGPLv3
-* Community-driven development
-* No proprietary lock-in
+- lokales WLAN
+- Netzwerk-Synchronisation
+- modulare Architektur
 
-## Project Status
+---
 
-OpenKFZ is currently under active development.
+# Aktueller Entwicklungsstand
 
-The project is in an early development phase. Features, architecture and APIs may change as development continues.
+## Fertig ✅
 
-## Requirements
+- Android Projekt eingerichtet
+- Kotlin eingerichtet
+- Jetpack Compose UI
+- Android Emulator eingerichtet
+- APK Installation getestet
+- Client/Master Konzept erstellt
+- Erste Benutzeroberfläche umgesetzt
 
-To build OpenKFZ locally you need:
 
-* Android Studio or compatible IDE
-* JDK 17+
-* Android SDK
-* Gradle (included via Gradle Wrapper)
+## Entwicklung 🚧
 
-## Build
+- Setup Bildschirm
+- Client Scanner Oberfläche
+- Master Verwaltungsoberfläche
 
-Clone the repository:
 
-```bash
-git clone https://github.com/NeoShinobiDev/OpenKFZ.git
-cd OpenKFZ
-```
+## Geplant 📋
 
-Build the project:
+- Kamera Integration
+- automatische Dokumentenerkennung
+- OCR Engine
+- PDF Generator
+- lokale Datenbank
+- Synchronisation im Netzwerk
+- Export Funktionen
 
-```bash
-./gradlew build
-```
+---
 
-Create an Android APK:
+# Screenshots 📸
 
-```bash
-./gradlew assemble
-```
+## Setup Bildschirm
 
-## Project Structure
+Geräteauswahl zwischen Client und Master.
 
-```
-OpenKFZ
-├── app/              # Android application
-├── docs/             # Project documentation
-├── gradle/           # Gradle wrapper
-├── build.gradle.kts  # Root Gradle configuration
-└── settings.gradle.kts
-```
+![Setup Screen](docs/screenshots/setup.png)
 
-## Documentation
 
-Additional documentation can be found in:
+## Client Scanner
 
-```
-docs/
-```
+Einfache Scanner-Oberfläche für Mitarbeiter.
 
-Currently available:
+![Client Scanner](docs/screenshots/client.png)
 
-* Architecture
-* API
-* Database
-* Network
-* OCR
-* Parser
-* Roadmap
 
-## Roadmap
+## Master Verwaltung
 
-Planned improvements:
+Verwaltung und Übersicht der gespeicherten Dokumente.
 
-* Vehicle database system
-* Document scanning and OCR
-* Maintenance tracking
-* User accounts
-* Synchronization
-* Extended vehicle information
+![Master Screen](docs/screenshots/master.png)
 
-## Contributing
+---
 
-Contributions are welcome.
-
-Before contributing:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Create a pull request
-
-Please ensure your changes are tested before submitting.
-
-## License
-
-This project is licensed under the GNU Affero General Public License v3.0.
-
-See [LICENSE](LICENSE) for details.
+# Projektstruktur
 
