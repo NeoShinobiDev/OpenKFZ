@@ -1,18 +1,38 @@
 package com.openkfz.app.ui
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PhoneAndroid
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.AdminPanelSettings
+import androidx.compose.material.icons.filled.QrCode
+
+
+
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.openkfz.app.ui.dashboard.DashboardScreen
+import com.openkfz.app.ui.settings.SettingsScreen
+import com.openkfz.app.ui.devices.DevicesScreen
+
+
+import com.openkfz.app.ui.qr.QrScreen
+import com.openkfz.app.ui.admin.AdminScreen
+import com.openkfz.app.ui.files.FileManagerScreen
+import com.openkfz.app.ui.database.DatabaseScreen
 
 
 @Composable
-fun MasterScreen() {
+fun MasterScreen(){
 
-    var selectedTab by remember { mutableIntStateOf(0) }
+    var page by remember {
+        mutableStateOf(0)
+    }
 
 
     Scaffold(
@@ -22,13 +42,22 @@ fun MasterScreen() {
             NavigationBar {
 
                 NavigationBarItem(
-                    selected = selectedTab == 0,
-                    onClick = { selectedTab = 0 },
+                    selected = page == 0,
+                    onClick = { page = 0 },
                     icon = {
-                        Icon(
-                            Icons.Default.Devices,
-                            null
-                        )
+                        Icon(Icons.Default.Home,null)
+                    },
+                    label = {
+                        Text("Dashboard")
+                    }
+                )
+
+
+                NavigationBarItem(
+                    selected = page == 1,
+                    onClick = { page = 1 },
+                    icon = {
+                        Icon(Icons.Default.PhoneAndroid,null)
                     },
                     label = {
                         Text("Geräte")
@@ -37,13 +66,22 @@ fun MasterScreen() {
 
 
                 NavigationBarItem(
-                    selected = selectedTab == 1,
-                    onClick = { selectedTab = 1 },
+                    selected = page == 2,
+                    onClick = { page = 2 },
                     icon = {
-                        Icon(
-                            Icons.Default.Folder,
-                            null
-                        )
+                        Icon(Icons.Default.Build,null)
+                    },
+                    label = {
+                        Text("Einstellungen")
+                    }
+                )
+
+
+                NavigationBarItem(
+                    selected = page == 3,
+                    onClick = { page = 3 },
+                    icon = {
+                        Icon(Icons.Default.Folder,null)
                     },
                     label = {
                         Text("Dateien")
@@ -52,16 +90,37 @@ fun MasterScreen() {
 
 
                 NavigationBarItem(
-                    selected = selectedTab == 2,
-                    onClick = { selectedTab = 2 },
+                    selected = page == 4,
+                    onClick = { page = 4 },
                     icon = {
-                        Icon(
-                            Icons.Default.Settings,
-                            null
-                        )
+                        Icon(Icons.Default.Storage,null)
                     },
                     label = {
-                        Text("Settings")
+                        Text("Datenbank")
+                    }
+                )
+
+
+                NavigationBarItem(
+                    selected = page == 5,
+                    onClick = { page = 5 },
+                    icon = {
+                        Icon(Icons.Default.AdminPanelSettings,null)
+                    },
+                    label = {
+                        Text("Admin")
+                    }
+                )
+
+
+                NavigationBarItem(
+                    selected = page == 6,
+                    onClick = { page = 6 },
+                    icon = {
+                        Icon(Icons.Default.QrCode,null)
+                    },
+                    label = {
+                        Text("QR")
                     }
                 )
 
@@ -73,176 +132,30 @@ fun MasterScreen() {
 
 
         Column(
-
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .padding(20.dp)
-
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(20.dp)
         ){
 
+            when(page){
 
-            Text(
-                text = "OpenKFZ Master",
-                style = MaterialTheme.typography.headlineLarge
-            )
+                0 -> DashboardScreen()
 
+                1 -> DevicesScreen()
 
-            Spacer(
-                Modifier.height(20.dp)
-            )
+                2 -> SettingsScreen()
 
+                3 -> FileManagerScreen()
 
-            when(selectedTab){
+                4 -> DatabaseScreen()
 
+                5 -> AdminScreen()
 
-                0 -> DeviceDashboard()
-
-
-                1 -> FileDashboard()
-
-
-                2 -> SettingsDashboard()
-
+                6 -> QrScreen()
 
             }
-
-
-        }
-
-    }
-
-}
-
-
-
-@Composable
-fun DeviceDashboard(){
-
-    Card(
-
-        modifier = Modifier
-            .fillMaxWidth()
-
-    ){
-
-        Column(
-            Modifier.padding(20.dp)
-        ){
-
-            Icon(
-                Icons.Default.DirectionsCar,
-                null
-            )
-
-            Text(
-                "Verbundene Fahrzeuge"
-            )
-
-
-            Text(
-                "Keine Geräte verbunden"
-            )
-
-        }
-
-    }
-
-}
-
-
-
-@Composable
-fun FileDashboard(){
-
-    Column{
-
-
-        Card(
-            Modifier.fillMaxWidth()
-        ){
-
-            Row(
-                Modifier.padding(20.dp)
-            ){
-
-                Icon(
-                    Icons.Default.Folder,
-                    null
-                )
-
-                Spacer(
-                    Modifier.width(15.dp)
-                )
-
-                Text(
-                    "Dateibrowser"
-                )
-
-            }
-
-        }
-
-
-        Spacer(
-            Modifier.height(15.dp)
-        )
-
-
-        Card(
-            Modifier.fillMaxWidth()
-        ){
-
-            Row(
-                Modifier.padding(20.dp)
-            ){
-
-                Icon(
-                    Icons.Default.PictureAsPdf,
-                    null
-                )
-
-                Spacer(
-                    Modifier.width(15.dp)
-                )
-
-                Text(
-                    "PDF Dokumente"
-                )
-
-            }
-
-        }
-
-    }
-
-}
-
-
-
-@Composable
-fun SettingsDashboard(){
-
-    Card(
-
-        Modifier.fillMaxWidth()
-
-    ){
-
-        Column(
-            Modifier.padding(20.dp)
-        ){
-
-            Icon(
-                Icons.Default.Settings,
-                null
-            )
-
-
-            Text(
-                "Master Einstellungen"
-            )
-
 
         }
 

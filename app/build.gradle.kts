@@ -38,6 +38,9 @@ android {
 
 
 dependencies {
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("com.google.zxing:core:3.5.3")
 
     implementation(
         "androidx.activity:activity-compose:1.10.1"

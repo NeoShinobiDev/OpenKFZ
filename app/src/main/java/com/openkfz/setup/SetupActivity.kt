@@ -2,58 +2,101 @@ package com.openkfz.setup
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.Gravity
-import android.widget.*
-
+import android.content.Intent
+import androidx.activity.compose.setContent
+import androidx.activity.ComponentActivity
+import androidx.compose.material3.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.openkfz.app.ui.MasterActivity
 import com.openkfz.client.ClientActivity
 
-class SetupActivity : Activity() {
+class SetupActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val layout = LinearLayout(this)
+        setContent {
 
-        layout.orientation = LinearLayout.VERTICAL
-        layout.gravity = Gravity.CENTER
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(30.dp)
+            ){
 
-
-        val title = TextView(this)
-
-        title.text = """
-OpenKfz
-
-Wähle Modus
-"""
-        title.textSize = 28f
-        title.gravity = Gravity.CENTER
-
-        layout.addView(title)
-
-
-        val client = Button(this)
-
-        client.text = "CLIENT"
-
-        client.setOnClickListener {
-            startActivity(
-                android.content.Intent(
-                    this,
-                    ClientActivity::class.java
+                Text(
+                    "OpenKFZ Einrichtung",
+                    style = MaterialTheme.typography.headlineLarge
                 )
-            )
+
+                Spacer(
+                    Modifier.height(40.dp)
+                )
+
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+
+                        getSharedPreferences(
+                            "openkfz",
+                            MODE_PRIVATE
+                        )
+                        .edit()
+                        .putString("role","MASTER")
+                        .apply()
+
+
+                        startActivity(
+                            Intent(
+                                this@SetupActivity,
+                                MasterActivity::class.java
+                            )
+                        )
+
+                        finish()
+
+                    }
+                ){
+                    Text("🖥 Dieses Gerät ist MASTER")
+                }
+
+
+                Spacer(
+                    Modifier.height(20.dp)
+                )
+
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+
+                        getSharedPreferences(
+                            "openkfz",
+                            MODE_PRIVATE
+                        )
+                        .edit()
+                        .putString("role","CLIENT")
+                        .apply()
+
+
+                        startActivity(
+                            Intent(
+                                this@SetupActivity,
+                                ClientActivity::class.java
+                            )
+                        )
+
+                        finish()
+
+                    }
+                ){
+                    Text("🚗 Dieses Gerät ist CLIENT")
+                }
+
+            }
+
         }
-
-        layout.addView(client)
-
-
-        val master = Button(this)
-
-        master.text = "MASTER"
-
-        layout.addView(master)
-
-
-        setContentView(layout)
     }
 }
