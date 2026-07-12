@@ -2,50 +2,60 @@ package com.openkfz.client
 
 import android.app.Activity
 import android.os.Bundle
+import android.content.Intent
 import android.view.Gravity
 import android.widget.*
 
 import com.openkfz.ui.CameraActivity
 
-class ClientActivity : Activity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+class ClientActivity : Activity(){
 
-        val layout = LinearLayout(this)
+override fun onCreate(savedInstanceState: Bundle?) {
 
-        layout.orientation = LinearLayout.VERTICAL
-        layout.gravity = Gravity.CENTER
+super.onCreate(savedInstanceState)
 
-        val title = TextView(this)
 
-        title.text = """
-OpenKfz Client
+val root = LinearLayout(this)
 
-Verbindung zum Master
+root.orientation = LinearLayout.VERTICAL
+root.gravity = Gravity.CENTER
+root.setPadding(30,30,30,30)
 
-QR Code später
-"""
-        title.textSize = 22f
-        title.gravity = Gravity.CENTER
 
-        layout.addView(title)
+val title = TextView(this)
+title.text = "Client Einrichtung"
+title.textSize = 26f
 
-        val button = Button(this)
 
-        button.text = "Zur Kamera"
+val qr = TextView(this)
+qr.text = "QR Code Verbindung
 
-        button.setOnClickListener {
-            startActivity(
-                android.content.Intent(
-                    this,
-                    CameraActivity::class.java
-                )
-            )
-        }
+(später)
 
-        layout.addView(button)
+Master suchen"
+qr.textSize = 18f
+qr.gravity = Gravity.CENTER
 
-        setContentView(layout)
-    }
+
+val start = Button(this)
+start.text = "Kamera starten"
+
+
+start.setOnClickListener {
+
+startActivity(Intent(this, CameraActivity::class.java))
+
+}
+
+
+root.addView(title)
+root.addView(qr)
+root.addView(start)
+
+
+setContentView(root)
+
+}
+
 }
