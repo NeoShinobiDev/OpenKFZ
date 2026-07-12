@@ -1,24 +1,32 @@
 package com.openkfz.client
-
+import androidx.compose.ui.unit.dp
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
+import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat
 import com.openkfz.app.R
+
 
 class ClientActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.CAMERA),
+            100
+        )
 
         setContent {
             ClientScreen()
@@ -31,12 +39,10 @@ class ClientActivity : ComponentActivity() {
 fun ClientScreen() {
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
+        modifier = Modifier.fillMaxSize()
     ) {
 
-        // Kamera kommt später hier rein
+        CameraPreview()
 
 
         FloatingActionButton(
@@ -44,10 +50,8 @@ fun ClientScreen() {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 32.dp),
-            containerColor = Color.White
-        ) {
-
-        }
+            containerColor = androidx.compose.ui.graphics.Color.White
+        ) {}
 
 
         IconButton(
@@ -59,10 +63,23 @@ fun ClientScreen() {
 
             Icon(
                 imageVector = Icons.Default.Settings,
-                contentDescription = "Settings",
-                tint = Color.White
+                contentDescription = "Settings"
             )
 
         }
     }
+}
+
+
+@Composable
+fun CameraPreview() {
+
+    AndroidView(
+        factory = { context ->
+
+            PreviewView(context)
+
+        },
+        modifier = Modifier.fillMaxSize()
+    )
 }
