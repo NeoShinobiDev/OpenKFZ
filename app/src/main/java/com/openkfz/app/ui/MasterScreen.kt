@@ -12,9 +12,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MasterScreen() {
 
-    var selectedTab by remember {
-        mutableIntStateOf(0)
-    }
+    var selectedTab by remember { mutableIntStateOf(0) }
+
 
     Scaffold(
 
@@ -28,7 +27,7 @@ fun MasterScreen() {
                     icon = {
                         Icon(
                             Icons.Default.Devices,
-                            contentDescription = "Geräte"
+                            null
                         )
                     },
                     label = {
@@ -43,7 +42,7 @@ fun MasterScreen() {
                     icon = {
                         Icon(
                             Icons.Default.Folder,
-                            contentDescription = "Dateien"
+                            null
                         )
                     },
                     label = {
@@ -58,7 +57,7 @@ fun MasterScreen() {
                     icon = {
                         Icon(
                             Icons.Default.Settings,
-                            contentDescription = "Settings"
+                            null
                         )
                     },
                     label = {
@@ -70,103 +69,180 @@ fun MasterScreen() {
 
         }
 
-    ) { padding ->
+    ){ padding ->
 
 
-        Surface(
+        Column(
 
             modifier = Modifier
-                .fillMaxSize()
                 .padding(padding)
+                .fillMaxSize()
+                .padding(20.dp)
 
-        ) {
-
-
-            Column(
-
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp)
-
-            ) {
+        ){
 
 
-                Text(
-                    text = "OpenKFZ Master",
-                    style = MaterialTheme.typography.headlineLarge
-                )
+            Text(
+                text = "OpenKFZ Master",
+                style = MaterialTheme.typography.headlineLarge
+            )
 
 
-                Spacer(
-                    modifier = Modifier.height(24.dp)
-                )
+            Spacer(
+                Modifier.height(20.dp)
+            )
 
 
-                when(selectedTab) {
+            when(selectedTab){
 
 
-                    0 -> {
-
-                        Text(
-                            text = "Verbundene Geräte"
-                        )
-
-                        Spacer(
-                            modifier = Modifier.height(16.dp)
-                        )
+                0 -> DeviceDashboard()
 
 
-                        Text(
-                            text = "Keine Geräte verbunden"
-                        )
-
-                    }
+                1 -> FileDashboard()
 
 
-                    1 -> {
+                2 -> SettingsDashboard()
 
-                        Text(
-                            text = "Datei Browser"
-                        )
-
-                        Spacer(
-                            modifier = Modifier.height(16.dp)
-                        )
-
-
-                        Button(
-                            onClick = {}
-                        ) {
-
-                            Text("PDF öffnen")
-
-                        }
-
-                    }
-
-
-                    2 -> {
-
-                        Text(
-                            text = "Master Einstellungen"
-                        )
-
-
-                        Spacer(
-                            modifier = Modifier.height(16.dp)
-                        )
-
-
-                        Text(
-                            text = "Netzwerk\nBenutzer\nSystem"
-
-                        )
-
-                    }
-
-                }
 
             }
+
+
+        }
+
+    }
+
+}
+
+
+
+@Composable
+fun DeviceDashboard(){
+
+    Card(
+
+        modifier = Modifier
+            .fillMaxWidth()
+
+    ){
+
+        Column(
+            Modifier.padding(20.dp)
+        ){
+
+            Icon(
+                Icons.Default.DirectionsCar,
+                null
+            )
+
+            Text(
+                "Verbundene Fahrzeuge"
+            )
+
+
+            Text(
+                "Keine Geräte verbunden"
+            )
+
+        }
+
+    }
+
+}
+
+
+
+@Composable
+fun FileDashboard(){
+
+    Column{
+
+
+        Card(
+            Modifier.fillMaxWidth()
+        ){
+
+            Row(
+                Modifier.padding(20.dp)
+            ){
+
+                Icon(
+                    Icons.Default.Folder,
+                    null
+                )
+
+                Spacer(
+                    Modifier.width(15.dp)
+                )
+
+                Text(
+                    "Dateibrowser"
+                )
+
+            }
+
+        }
+
+
+        Spacer(
+            Modifier.height(15.dp)
+        )
+
+
+        Card(
+            Modifier.fillMaxWidth()
+        ){
+
+            Row(
+                Modifier.padding(20.dp)
+            ){
+
+                Icon(
+                    Icons.Default.PictureAsPdf,
+                    null
+                )
+
+                Spacer(
+                    Modifier.width(15.dp)
+                )
+
+                Text(
+                    "PDF Dokumente"
+                )
+
+            }
+
+        }
+
+    }
+
+}
+
+
+
+@Composable
+fun SettingsDashboard(){
+
+    Card(
+
+        Modifier.fillMaxWidth()
+
+    ){
+
+        Column(
+            Modifier.padding(20.dp)
+        ){
+
+            Icon(
+                Icons.Default.Settings,
+                null
+            )
+
+
+            Text(
+                "Master Einstellungen"
+            )
+
 
         }
 
