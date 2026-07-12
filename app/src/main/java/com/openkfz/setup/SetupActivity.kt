@@ -1,13 +1,13 @@
-package com.openkfz.client
+package com.openkfz.setup
 
 import android.app.Activity
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.*
 
-import com.openkfz.ui.CameraActivity
+import com.openkfz.client.ClientActivity
 
-class ClientActivity : Activity() {
+class SetupActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,34 +17,42 @@ class ClientActivity : Activity() {
         layout.orientation = LinearLayout.VERTICAL
         layout.gravity = Gravity.CENTER
 
+
         val title = TextView(this)
 
         title.text = """
-OpenKfz Client
+OpenKfz
 
-Verbindung zum Master
-
-QR Code später
+Wähle Modus
 """
-        title.textSize = 22f
+        title.textSize = 28f
         title.gravity = Gravity.CENTER
 
         layout.addView(title)
 
-        val button = Button(this)
 
-        button.text = "Zur Kamera"
+        val client = Button(this)
 
-        button.setOnClickListener {
+        client.text = "CLIENT"
+
+        client.setOnClickListener {
             startActivity(
                 android.content.Intent(
                     this,
-                    CameraActivity::class.java
+                    ClientActivity::class.java
                 )
             )
         }
 
-        layout.addView(button)
+        layout.addView(client)
+
+
+        val master = Button(this)
+
+        master.text = "MASTER"
+
+        layout.addView(master)
+
 
         setContentView(layout)
     }

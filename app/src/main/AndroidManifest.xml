@@ -1,12 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.CAMERA" />
     <application
-        android:theme="@style/AppTheme"
-        android:label="OpenKFZ"
-        android:icon="@mipmap/ic_launcher">
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="OpenKfz"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.OpenKfz">
 
-        <!-- Startseite -->
+        <activity android:name="com.openkfz.setup.SetupActivity"/>
+        <activity android:name="com.openkfz.client.ClientActivity"/>
+        <activity android:name="com.openkfz.ui.CameraActivity"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -17,13 +22,6 @@
             </intent-filter>
 
         </activity>
-
-
-        <!-- Client Kamera Ansicht -->
-        <activity
-            android:name=".client.ClientActivity"
-            android:screenOrientation="portrait"
-            android:exported="true" />
 
     </application>
 

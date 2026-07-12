@@ -1,78 +1,44 @@
 package com.openkfz.app
 
+import android.app.Activity
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.runtime.*
-import com.openkfz.app.ui.ClientScreen
-import com.openkfz.app.ui.MasterScreen
-import com.openkfz.app.ui.SetupScreen
+import android.content.Intent
+import android.content.SharedPreferences
+import com.openkfz.setup.SetupActivity
+import com.openkfz.client.ClientActivity
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : Activity(){
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+override fun onCreate(savedInstanceState: Bundle?) {
+super.onCreate(savedInstanceState)
 
-        super.onCreate(savedInstanceState)
 
-        setContent {
+val prefs: SharedPreferences =
+getSharedPreferences("openkfz", MODE_PRIVATE)
 
-            OpenKFZApp()
 
-        }
+val setupDone =
+prefs.getBoolean("setup_done", false)
 
-    }
+
+if(!setupDone){
+
+startActivity(
+Intent(this, SetupActivity::class.java)
+)
+
+}else{
+
+startActivity(
+Intent(this, ClientActivity::class.java)
+)
 
 }
 
 
-@Composable
-fun OpenKFZApp() {
+finish()
 
-
-    var screen by remember {
-        mutableStateOf("setup")
-    }
-
-
-    when(screen) {
-
-
-        "setup" -> {
-
-            SetupScreen(
-
-                onClientSelected = {
-
-                    screen = "client"
-
-                },
-
-                onMasterSelected = {
-
-                    screen = "master"
-
-                }
-
-            )
-
-        }
-
-
-        "client" -> {
-
-            ClientScreen()
-
-        }
-
-
-        "master" -> {
-
-            MasterScreen()
-
-        }
-
-
-    }
+}
 
 }
