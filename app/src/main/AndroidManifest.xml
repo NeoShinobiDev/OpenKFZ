@@ -2,7 +2,11 @@
 
     <application
         android:theme="@style/AppTheme"
-        android:label="OpenKFZ">
+        android:label="OpenKFZ"
+        android:icon="@mipmap/ic_launcher">
+
+    </application>
+
 
         <activity
             android:name=".MainActivity"
