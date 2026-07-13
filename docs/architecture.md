@@ -1,0 +1,13 @@
+# Architektur
+
+## Komponenten
+
+-
+
+## Datenfluss
+
+-
+
+## Entscheidungen
+
+-
