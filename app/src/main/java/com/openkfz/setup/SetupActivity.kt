@@ -1,13 +1,25 @@
 package com.openkfz.setup
 
-import android.app.Activity
-import android.os.Bundle
 import android.content.Intent
-import androidx.activity.compose.setContent
+import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.*
-import androidx.compose.foundation.layout.*
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.openkfz.app.ui.MasterActivity
 import com.openkfz.client.ClientActivity
@@ -18,85 +30,66 @@ class SetupActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            SetupScreenContent()
+        }
+    }
+}
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(30.dp)
-            ){
+@Composable
+private fun SetupScreenContent() {
+    val configuration = LocalConfiguration.current
+    val isWideScreen = configuration.screenWidthDp >= 600
+    val activity = LocalContext.current as? ComponentActivity
 
-                Text(
-                    "OpenKFZ Einrichtung",
-                    style = MaterialTheme.typography.headlineLarge
-                )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            "OpenKFZ Einrichtung",
+            style = MaterialTheme.typography.headlineLarge
+        )
 
-                Spacer(
-                    Modifier.height(40.dp)
-                )
+        Spacer(Modifier.height(24.dp))
 
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-
-                        getSharedPreferences(
-                            "openkfz",
-                            MODE_PRIVATE
-                        )
+        Column(
+            modifier = Modifier.widthIn(max = if (isWideScreen) 560.dp else Double.MAX_VALUE.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    getSharedPreferences("openkfz", MODE_PRIVATE)
                         .edit()
-                        .putString("role","MASTER")
+                        .putString("role", "MASTER")
                         .apply()
 
-
-                        startActivity(
-                            Intent(
-                                this@SetupActivity,
-                                MasterActivity::class.java
-                            )
-                        )
-
-                        finish()
-
+                    activity?.let { currentActivity ->
+                        currentActivity.startActivity(Intent(currentActivity, MasterActivity::class.java))
                     }
-                ){
-                    Text("🖥 Dieses Gerät ist MASTER")
                 }
-
-
-                Spacer(
-                    Modifier.height(20.dp)
-                )
-
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-
-                        getSharedPreferences(
-                            "openkfz",
-                            MODE_PRIVATE
-                        )
-                        .edit()
-                        .putString("role","CLIENT")
-                        .apply()
-
-
-                        startActivity(
-                            Intent(
-                                this@SetupActivity,
-                                ClientActivity::class.java
-                            )
-                        )
-
-                        finish()
-
-                    }
-                ){
-                    Text("🚗 Dieses Gerät ist CLIENT")
-                }
-
+            ) {
+                Text("🖥 Dieses Gerät ist MASTER")
             }
 
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    getSharedPreferences("openkfz", MODE_PRIVATE)
+                        .edit()
+                        .putString("role", "CLIENT")
+                        .apply()
+
+                    activity?.let { currentActivity ->
+                        currentActivity.startActivity(Intent(currentActivity, ClientActivity::class.java))
+                    }
+                }
+            ) {
+                Text("🚗 Dieses Gerät ist CLIENT")
+            }
         }
     }
 }

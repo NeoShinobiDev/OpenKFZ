@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.openkfz.app.ui.dashboard.DashboardScreen
 import com.openkfz.app.ui.settings.SettingsScreen
@@ -35,97 +36,115 @@ fun MasterScreen(){
     }
 
 
+    val configuration = LocalConfiguration.current
+    val isWideScreen = configuration.screenWidthDp >= 900
+
     Scaffold(
 
         bottomBar = {
+            if (isWideScreen) {
+                NavigationRail {
+                    NavigationRailItem(
+                        selected = page == 0,
+                        onClick = { page = 0 },
+                        icon = { Icon(Icons.Default.Home, null) },
+                        label = { Text("Dashboard") }
+                    )
 
-            NavigationBar {
+                    NavigationRailItem(
+                        selected = page == 1,
+                        onClick = { page = 1 },
+                        icon = { Icon(Icons.Default.PhoneAndroid, null) },
+                        label = { Text("Geräte") }
+                    )
 
-                NavigationBarItem(
-                    selected = page == 0,
-                    onClick = { page = 0 },
-                    icon = {
-                        Icon(Icons.Default.Home,null)
-                    },
-                    label = {
-                        Text("Dashboard")
-                    }
-                )
+                    NavigationRailItem(
+                        selected = page == 2,
+                        onClick = { page = 2 },
+                        icon = { Icon(Icons.Default.Build, null) },
+                        label = { Text("Einstellungen") }
+                    )
 
+                    NavigationRailItem(
+                        selected = page == 3,
+                        onClick = { page = 3 },
+                        icon = { Icon(Icons.Default.Folder, null) },
+                        label = { Text("Dateien") }
+                    )
 
-                NavigationBarItem(
-                    selected = page == 1,
-                    onClick = { page = 1 },
-                    icon = {
-                        Icon(Icons.Default.PhoneAndroid,null)
-                    },
-                    label = {
-                        Text("Geräte")
-                    }
-                )
+                    NavigationRailItem(
+                        selected = page == 4,
+                        onClick = { page = 4 },
+                        icon = { Icon(Icons.Default.Storage, null) },
+                        label = { Text("Datenbank") }
+                    )
 
+                    NavigationRailItem(
+                        selected = page == 5,
+                        onClick = { page = 5 },
+                        icon = { Icon(Icons.Default.AdminPanelSettings, null) },
+                        label = { Text("Admin") }
+                    )
 
-                NavigationBarItem(
-                    selected = page == 2,
-                    onClick = { page = 2 },
-                    icon = {
-                        Icon(Icons.Default.Build,null)
-                    },
-                    label = {
-                        Text("Einstellungen")
-                    }
-                )
+                    NavigationRailItem(
+                        selected = page == 6,
+                        onClick = { page = 6 },
+                        icon = { Icon(Icons.Default.QrCode, null) },
+                        label = { Text("QR") }
+                    )
+                }
+            } else {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = page == 0,
+                        onClick = { page = 0 },
+                        icon = { Icon(Icons.Default.Home, null) },
+                        label = { Text("Dashboard") }
+                    )
 
+                    NavigationBarItem(
+                        selected = page == 1,
+                        onClick = { page = 1 },
+                        icon = { Icon(Icons.Default.PhoneAndroid, null) },
+                        label = { Text("Geräte") }
+                    )
 
-                NavigationBarItem(
-                    selected = page == 3,
-                    onClick = { page = 3 },
-                    icon = {
-                        Icon(Icons.Default.Folder,null)
-                    },
-                    label = {
-                        Text("Dateien")
-                    }
-                )
+                    NavigationBarItem(
+                        selected = page == 2,
+                        onClick = { page = 2 },
+                        icon = { Icon(Icons.Default.Build, null) },
+                        label = { Text("Einstellungen") }
+                    )
 
+                    NavigationBarItem(
+                        selected = page == 3,
+                        onClick = { page = 3 },
+                        icon = { Icon(Icons.Default.Folder, null) },
+                        label = { Text("Dateien") }
+                    )
 
-                NavigationBarItem(
-                    selected = page == 4,
-                    onClick = { page = 4 },
-                    icon = {
-                        Icon(Icons.Default.Storage,null)
-                    },
-                    label = {
-                        Text("Datenbank")
-                    }
-                )
+                    NavigationBarItem(
+                        selected = page == 4,
+                        onClick = { page = 4 },
+                        icon = { Icon(Icons.Default.Storage, null) },
+                        label = { Text("Datenbank") }
+                    )
 
+                    NavigationBarItem(
+                        selected = page == 5,
+                        onClick = { page = 5 },
+                        icon = { Icon(Icons.Default.AdminPanelSettings, null) },
+                        label = { Text("Admin") }
+                    )
 
-                NavigationBarItem(
-                    selected = page == 5,
-                    onClick = { page = 5 },
-                    icon = {
-                        Icon(Icons.Default.AdminPanelSettings,null)
-                    },
-                    label = {
-                        Text("Admin")
-                    }
-                )
-
-
-                NavigationBarItem(
-                    selected = page == 6,
-                    onClick = { page = 6 },
-                    icon = {
-                        Icon(Icons.Default.QrCode,null)
-                    },
-                    label = {
-                        Text("QR")
-                    }
-                )
-
+                    NavigationBarItem(
+                        selected = page == 6,
+                        onClick = { page = 6 },
+                        icon = { Icon(Icons.Default.QrCode, null) },
+                        label = { Text("QR") }
+                    )
+                }
             }
-
         }
 
     ){ padding ->

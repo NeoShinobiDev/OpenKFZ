@@ -8,52 +8,20 @@ import com.openkfz.app.ui.MasterActivity
 import com.openkfz.app.ui.start.StartScreen
 import com.openkfz.client.ClientActivity
 
-
 class MainActivity : ComponentActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
-
         setContent {
-
-
             StartScreen(
-
                 onMaster = {
-
-                    startActivity(
-                        Intent(
-                            this,
-                            MasterActivity::class.java
-                        )
-                    )
-
-                    finish()
-
+                    startActivity(Intent(this, MasterActivity::class.java))
                 },
-
-
                 onClient = {
-
-                    startActivity(
-                        Intent(
-                            this,
-                            ClientActivity::class.java
-                        )
-                    )
-
-                    finish()
-
+                    startActivity(Intent(this, ClientActivity::class.java))
                 }
-
             )
-
-
         }
-
     }
-
 }
