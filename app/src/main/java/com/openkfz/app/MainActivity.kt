@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.openkfz.app.ui.MasterActivity
 import com.openkfz.app.ui.start.StartScreen
+import com.openkfz.app.ui.theme.OpenKfzTheme
 import com.openkfz.client.ClientActivity
 
 
@@ -19,38 +20,40 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
+            OpenKfzTheme {
 
-            StartScreen(
+                StartScreen(
 
-                onMaster = {
+                    onMaster = {
 
-                    startActivity(
-                        Intent(
-                            this,
-                            MasterActivity::class.java
+                        startActivity(
+                            Intent(
+                                this,
+                                MasterActivity::class.java
+                            )
                         )
-                    )
 
-                    finish()
+                        finish()
 
-                },
+                    },
 
 
-                onClient = {
+                    onClient = {
 
-                    startActivity(
-                        Intent(
-                            this,
-                            ClientActivity::class.java
+                        startActivity(
+                            Intent(
+                                this,
+                                ClientActivity::class.java
+                            )
                         )
-                    )
 
-                    finish()
+                        finish()
 
-                }
+                    }
 
-            )
+                )
 
+            }
 
         }
 

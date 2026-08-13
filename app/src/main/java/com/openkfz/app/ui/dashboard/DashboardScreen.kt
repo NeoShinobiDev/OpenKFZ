@@ -1,24 +1,61 @@
 package com.openkfz.app.ui.dashboard
 
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun DashboardScreen(){
 
-    Card {
+    Card(
+        modifier = Modifier.fillMaxWidth()
+    ) {
 
-        Text(
-            text = """
-            OpenKfz Dashboard
-            
-            🟢 System Online
-            
-            Geräte: 0
-            Benutzer: 0
-            Datenbank: OK
-            """.trimIndent()
-        )
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+
+            Text(
+                text = "OpenKFZ Dashboard",
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            Text(
+                text = "🟢 System Online",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
+            )
+
+            DashboardStat("Geräte", "0")
+            DashboardStat("Benutzer", "0")
+            DashboardStat("Datenbank", "OK")
+
+        }
+
+    }
+
+}
+
+@Composable
+private fun DashboardStat(label: String, value: String) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+
+        Text(text = label, style = MaterialTheme.typography.bodyMedium)
+        Text(text = value, style = MaterialTheme.typography.bodyMedium)
 
     }
 

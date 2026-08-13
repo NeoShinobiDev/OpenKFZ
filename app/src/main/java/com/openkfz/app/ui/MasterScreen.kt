@@ -44,6 +44,7 @@ fun MasterScreen(){
                 NavigationBarItem(
                     selected = page == 0,
                     onClick = { page = 0 },
+                    alwaysShowLabel = false,
                     icon = {
                         Icon(Icons.Default.Home,null)
                     },
@@ -56,6 +57,7 @@ fun MasterScreen(){
                 NavigationBarItem(
                     selected = page == 1,
                     onClick = { page = 1 },
+                    alwaysShowLabel = false,
                     icon = {
                         Icon(Icons.Default.PhoneAndroid,null)
                     },
@@ -68,6 +70,7 @@ fun MasterScreen(){
                 NavigationBarItem(
                     selected = page == 2,
                     onClick = { page = 2 },
+                    alwaysShowLabel = false,
                     icon = {
                         Icon(Icons.Default.Build,null)
                     },
@@ -80,6 +83,7 @@ fun MasterScreen(){
                 NavigationBarItem(
                     selected = page == 3,
                     onClick = { page = 3 },
+                    alwaysShowLabel = false,
                     icon = {
                         Icon(Icons.Default.Folder,null)
                     },
@@ -92,6 +96,7 @@ fun MasterScreen(){
                 NavigationBarItem(
                     selected = page == 4,
                     onClick = { page = 4 },
+                    alwaysShowLabel = false,
                     icon = {
                         Icon(Icons.Default.Storage,null)
                     },
@@ -104,6 +109,7 @@ fun MasterScreen(){
                 NavigationBarItem(
                     selected = page == 5,
                     onClick = { page = 5 },
+                    alwaysShowLabel = false,
                     icon = {
                         Icon(Icons.Default.AdminPanelSettings,null)
                     },
@@ -116,6 +122,7 @@ fun MasterScreen(){
                 NavigationBarItem(
                     selected = page == 6,
                     onClick = { page = 6 },
+                    alwaysShowLabel = false,
                     icon = {
                         Icon(Icons.Default.QrCode,null)
                     },

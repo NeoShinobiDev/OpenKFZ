@@ -3,6 +3,7 @@ package com.openkfz.app.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.openkfz.app.ui.theme.OpenKfzTheme
 
 
 class MasterActivity : ComponentActivity() {
@@ -12,7 +13,11 @@ class MasterActivity : ComponentActivity() {
 
         setContent {
 
-            MasterScreen()
+            OpenKfzTheme {
+
+                MasterScreen()
+
+            }
 
         }
     }

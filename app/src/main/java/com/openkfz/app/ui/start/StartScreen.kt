@@ -1,5 +1,6 @@
 package com.openkfz.app.ui.start
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ fun StartScreen(
         modifier =
         Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(30.dp),
 
         verticalArrangement =
