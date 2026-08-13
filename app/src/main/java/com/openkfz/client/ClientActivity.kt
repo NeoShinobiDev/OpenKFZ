@@ -9,6 +9,8 @@ import android.content.Intent
 import android.view.Gravity
 import android.widget.*
 
+import com.openkfz.app.qr.ClientQrData
+import com.openkfz.app.qr.QrGenerator
 import com.openkfz.ui.CameraActivity
 
 class ClientActivity : Activity(){
@@ -34,19 +36,17 @@ title.setTextColor(Color.parseColor("#0D47A1"))
 title.setTypeface(null, Typeface.BOLD)
 title.gravity = Gravity.CENTER
 
-val qr = TextView(this)
-qr.text = """
-QR Code Verbindung
+val qrLabel = TextView(this)
+qrLabel.text = "Diesen QR-Code am Master scannen lassen:"
+qrLabel.textSize = 16f
+qrLabel.gravity = Gravity.CENTER
+qrLabel.setTextColor(Color.parseColor("#455A64"))
+qrLabel.setPadding(0, dp(24), 0, dp(16))
 
-(später)
-
-Master suchen
-""".trimIndent()
-
-qr.textSize = 18f
-qr.gravity = Gravity.CENTER
-qr.setTextColor(Color.parseColor("#455A64"))
-qr.setPadding(0, dp(24), 0, dp(24))
+val qrImage = ImageView(this)
+val qrData = ClientQrData.create(this)
+qrImage.setImageBitmap(QrGenerator.create(qrData, size = 500))
+qrImage.layoutParams = LinearLayout.LayoutParams(dp(220), dp(220))
 
 val start = Button(this)
 start.text = "Kamera starten"
@@ -58,6 +58,13 @@ buttonBackground.setColor(Color.parseColor("#2196F3"))
 buttonBackground.cornerRadius = dp(24).toFloat()
 start.background = buttonBackground
 
+val startParams = LinearLayout.LayoutParams(
+    LinearLayout.LayoutParams.WRAP_CONTENT,
+    LinearLayout.LayoutParams.WRAP_CONTENT
+)
+startParams.topMargin = dp(28)
+start.layoutParams = startParams
+
 start.setOnClickListener {
 
 startActivity(Intent(this, CameraActivity::class.java))
@@ -65,7 +72,8 @@ startActivity(Intent(this, CameraActivity::class.java))
 }
 
 root.addView(title)
-root.addView(qr)
+root.addView(qrLabel)
+root.addView(qrImage)
 root.addView(start)
 
 setContentView(root)
