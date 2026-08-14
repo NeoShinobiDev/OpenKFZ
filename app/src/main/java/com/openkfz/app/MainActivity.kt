@@ -33,8 +33,6 @@ class MainActivity : ComponentActivity() {
                             )
                         )
 
-                        finish()
-
                     },
 
 
@@ -46,8 +44,6 @@ class MainActivity : ComponentActivity() {
                                 ClientActivity::class.java
                             )
                         )
-
-                        finish()
 
                     }
 

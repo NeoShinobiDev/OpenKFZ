@@ -2,6 +2,9 @@ package com.openkfz.app.ui.start
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Computer
+import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -41,35 +44,57 @@ fun StartScreen(
         Button(
 
             modifier =
-            Modifier.fillMaxWidth(),
+            Modifier
+                .fillMaxWidth()
+                .height(56.dp),
 
             onClick = onMaster
 
         ){
 
+            Icon(
+                imageVector = Icons.Default.Computer,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
+            )
+
+            Spacer(Modifier.width(12.dp))
+
             Text(
-                "🖥 Master einrichten"
+                text = "Master einrichten",
+                style = MaterialTheme.typography.labelLarge
             )
 
         }
 
 
         Spacer(
-            Modifier.height(20.dp)
+            Modifier.height(16.dp)
         )
 
 
         Button(
 
             modifier =
-            Modifier.fillMaxWidth(),
+            Modifier
+                .fillMaxWidth()
+                .height(56.dp),
 
             onClick = onClient
 
         ){
 
+            Icon(
+                imageVector = Icons.Default.PhoneAndroid,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
+            )
+
+            Spacer(Modifier.width(12.dp))
+
             Text(
-                "📱 Client verbinden"
+                text = "Client verbinden",
+                style = MaterialTheme.typography.labelLarge
             )
 
         }

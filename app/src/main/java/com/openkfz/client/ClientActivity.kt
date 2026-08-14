@@ -26,12 +26,14 @@ val root = LinearLayout(this)
 
 root.orientation = LinearLayout.VERTICAL
 root.gravity = Gravity.CENTER
-root.setPadding(dp(30), dp(30), dp(30), dp(30))
+root.setPadding(dp(32), dp(32), dp(32), dp(32))
 root.setBackgroundColor(Color.parseColor("#F7F9FC"))
 
+// Text sizes mirror Material3's default type scale (titleLarge/bodyLarge/labelLarge),
+// since this legacy View screen has no MaterialTheme.typography to draw on.
 val title = TextView(this)
 title.text = "Client Einrichtung"
-title.textSize = 26f
+title.textSize = 22f
 title.setTextColor(Color.parseColor("#0D47A1"))
 title.setTypeface(null, Typeface.BOLD)
 title.gravity = Gravity.CENTER
@@ -50,8 +52,9 @@ qrImage.layoutParams = LinearLayout.LayoutParams(dp(220), dp(220))
 
 val start = Button(this)
 start.text = "Kamera starten"
+start.textSize = 14f
 start.setTextColor(Color.WHITE)
-start.setPadding(dp(24), dp(12), dp(24), dp(12))
+start.setPadding(dp(24), dp(16), dp(24), dp(16))
 
 val buttonBackground = GradientDrawable()
 buttonBackground.setColor(Color.parseColor("#2196F3"))
@@ -62,7 +65,7 @@ val startParams = LinearLayout.LayoutParams(
     LinearLayout.LayoutParams.WRAP_CONTENT,
     LinearLayout.LayoutParams.WRAP_CONTENT
 )
-startParams.topMargin = dp(28)
+startParams.topMargin = dp(32)
 start.layoutParams = startParams
 
 start.setOnClickListener {
