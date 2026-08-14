@@ -24,4 +24,10 @@ interface FahrzeugDao {
 
     @Query("SELECT * FROM fahrzeuge WHERE id = :id")
     suspend fun getById(id: Long): Fahrzeug?
+
+    @Query("DELETE FROM fahrzeuge")
+    suspend fun deleteAll()
+
+    @Query("SELECT COUNT(*) FROM fahrzeuge")
+    suspend fun count(): Int
 }
