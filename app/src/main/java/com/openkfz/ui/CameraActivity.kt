@@ -2,11 +2,15 @@ package com.openkfz.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraSelector
@@ -17,8 +21,8 @@ import androidx.camera.core.ImageCapture.OutputFileOptions
 import androidx.camera.core.ImageCapture.OutputFileResults
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.activity.result.contract.ActivityResultContracts
 import com.openkfz.app.files.documentsDir
 import java.io.File
 import java.text.SimpleDateFormat
@@ -28,7 +32,12 @@ import java.util.Locale
 class CameraActivity : ComponentActivity() {
 
     private lateinit var previewView: PreviewView
+    private lateinit var reviewOverlay: FrameLayout
+    private lateinit var reviewImage: ImageView
+    private lateinit var captureButton: Button
+    private lateinit var settingsButton: Button
     private var imageCapture: ImageCapture? = null
+    private var pendingCaptureFile: File? = null
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -44,34 +53,37 @@ class CameraActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val density = resources.displayMetrics.density
-        fun dp(value: Int) = (value * density).toInt()
+        val dp = { value: Int -> (value * density).toInt() }
 
         val frame = FrameLayout(this)
 
         previewView = PreviewView(this)
         frame.addView(previewView)
 
-        val settings = Button(this)
-        settings.text = "⚙"
+        settingsButton = Button(this)
+        settingsButton.text = "⚙"
 
         val settingsParams = FrameLayout.LayoutParams(dp(56), dp(56))
         settingsParams.gravity = Gravity.BOTTOM or Gravity.END
         settingsParams.setMargins(0, 0, dp(16), dp(16))
 
-        frame.addView(settings, settingsParams)
+        frame.addView(settingsButton, settingsParams)
 
-        val capture = Button(this)
-        capture.text = "●"
-        capture.textSize = 28f
-        capture.setTextColor(Color.parseColor("#2196F3"))
+        captureButton = Button(this)
+        captureButton.text = "●"
+        captureButton.textSize = 28f
+        captureButton.setTextColor(Color.parseColor("#2196F3"))
 
         val captureParams = FrameLayout.LayoutParams(dp(72), dp(72))
         captureParams.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
         captureParams.setMargins(0, 0, 0, dp(24))
 
-        capture.setOnClickListener { takePhoto() }
+        captureButton.setOnClickListener { takePhoto() }
 
-        frame.addView(capture, captureParams)
+        frame.addView(captureButton, captureParams)
+
+        buildReviewOverlay(dp)
+        frame.addView(reviewOverlay)
 
         setContentView(frame)
 
@@ -83,13 +95,72 @@ class CameraActivity : ComponentActivity() {
 
     }
 
+    private fun buildReviewOverlay(dp: (Int) -> Int) {
+
+        reviewOverlay = FrameLayout(this)
+        reviewOverlay.setBackgroundColor(Color.BLACK)
+        reviewOverlay.visibility = android.view.View.GONE
+
+        reviewImage = ImageView(this)
+        reviewImage.scaleType = ImageView.ScaleType.FIT_CENTER
+        reviewOverlay.addView(
+            reviewImage,
+            FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        )
+
+        val buttonRow = LinearLayout(this)
+        buttonRow.orientation = LinearLayout.HORIZONTAL
+        buttonRow.gravity = Gravity.CENTER
+
+        val discard = Button(this)
+        discard.text = "Verwerfen"
+        discard.setTextColor(Color.WHITE)
+        discard.setPadding(dp(24), dp(16), dp(24), dp(16))
+        val discardBg = GradientDrawable()
+        discardBg.setColor(Color.parseColor("#616161"))
+        discardBg.cornerRadius = dp(24).toFloat()
+        discard.background = discardBg
+        discard.setOnClickListener { discardCapture() }
+
+        val discardParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        discardParams.setMargins(0, 0, dp(16), 0)
+
+        val confirm = Button(this)
+        confirm.text = "Übernehmen"
+        confirm.setTextColor(Color.WHITE)
+        confirm.setPadding(dp(24), dp(16), dp(24), dp(16))
+        val confirmBg = GradientDrawable()
+        confirmBg.setColor(Color.parseColor("#2196F3"))
+        confirmBg.cornerRadius = dp(24).toFloat()
+        confirm.background = confirmBg
+        confirm.setOnClickListener { confirmCapture() }
+
+        buttonRow.addView(discard, discardParams)
+        buttonRow.addView(confirm)
+
+        val rowParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        rowParams.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+        rowParams.setMargins(0, 0, 0, dp(32))
+
+        reviewOverlay.addView(buttonRow, rowParams)
+
+    }
+
     private fun hasCameraPermission(): Boolean {
 
         return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
             PackageManager.PERMISSION_GRANTED
 
     }
-
 
     private fun startCamera() {
 
@@ -132,9 +203,11 @@ class CameraActivity : ComponentActivity() {
         val capture = imageCapture ?: return
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMANY)
-        val file = File(documentsDir(this), "scan_${dateFormat.format(Date())}.jpg")
+        val tempFile = File(cacheDir, "pending_scan_${dateFormat.format(Date())}.jpg")
 
-        val outputOptions = OutputFileOptions.Builder(file).build()
+        val outputOptions = OutputFileOptions.Builder(tempFile).build()
+
+        captureButton.isEnabled = false
 
         capture.takePicture(
             outputOptions,
@@ -142,10 +215,12 @@ class CameraActivity : ComponentActivity() {
             object : ImageCapture.OnImageSavedCallback {
 
                 override fun onImageSaved(output: OutputFileResults) {
-                    Toast.makeText(this@CameraActivity, "Gespeichert: ${file.name}", Toast.LENGTH_LONG).show()
+                    captureButton.isEnabled = true
+                    showReview(tempFile)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
+                    captureButton.isEnabled = true
                     Toast.makeText(this@CameraActivity, "Aufnahme fehlgeschlagen", Toast.LENGTH_LONG).show()
                 }
 
@@ -154,5 +229,60 @@ class CameraActivity : ComponentActivity() {
 
     }
 
+    private fun showReview(file: File) {
+
+        pendingCaptureFile = file
+
+        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+        reviewImage.setImageBitmap(bitmap)
+
+        reviewOverlay.visibility = android.view.View.VISIBLE
+        captureButton.visibility = android.view.View.GONE
+        settingsButton.visibility = android.view.View.GONE
+
+    }
+
+    private fun hideReview() {
+
+        reviewOverlay.visibility = android.view.View.GONE
+        captureButton.visibility = android.view.View.VISIBLE
+        settingsButton.visibility = android.view.View.VISIBLE
+
+    }
+
+    private fun discardCapture() {
+
+        pendingCaptureFile?.delete()
+        pendingCaptureFile = null
+
+        hideReview()
+
+    }
+
+    private fun confirmCapture() {
+
+        val temp = pendingCaptureFile ?: return
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMANY)
+        val finalFile = File(documentsDir(this), "scan_${dateFormat.format(Date())}.jpg")
+
+        val saved = try {
+            temp.copyTo(finalFile, overwrite = true)
+            temp.delete()
+            true
+        } catch (e: Exception) {
+            false
+        }
+
+        if (saved) {
+            Toast.makeText(this, "Gespeichert: ${finalFile.name}", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, "Speichern fehlgeschlagen", Toast.LENGTH_LONG).show()
+        }
+
+        pendingCaptureFile = null
+        hideReview()
+
+    }
 
 }
