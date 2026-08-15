@@ -55,8 +55,14 @@ fun DashboardScreen(){
                 style = MaterialTheme.typography.titleLarge
             )
 
+            val statusText = when (dbStatus) {
+                "OK" -> "🟢 System Online"
+                "Fehler" -> "🔴 Systemfehler"
+                else -> "🟡 Prüfe…"
+            }
+
             Text(
-                text = "🟢 System Online",
+                text = statusText,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
             )
