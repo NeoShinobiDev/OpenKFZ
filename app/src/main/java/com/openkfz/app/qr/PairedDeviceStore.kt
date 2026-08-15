@@ -33,6 +33,19 @@ object PairedDeviceStore {
     fun addOrUpdate(context: Context, device: PairedDevice) {
 
         val updated = devices.value.filterNot { it.id == device.id } + device
+        persist(context, updated)
+
+    }
+
+    fun remove(context: Context, device: PairedDevice) {
+
+        val updated = devices.value.filterNot { it.id == device.id }
+        persist(context, updated)
+
+    }
+
+    private fun persist(context: Context, updated: List<PairedDevice>) {
+
         devices.value = updated
 
         val serialized = updated.map { "${it.id}|${it.name}" }.toSet()

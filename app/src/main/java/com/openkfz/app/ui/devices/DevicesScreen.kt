@@ -1,14 +1,21 @@
 package com.openkfz.app.ui.devices
 
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -116,11 +123,26 @@ fun DevicesScreen(){
 
                 items(devices) { device ->
 
-                    Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
 
-                        Text(text = device.name, style = MaterialTheme.typography.bodyLarge)
+                        Column {
 
-                        Text(text = device.id, style = MaterialTheme.typography.bodySmall)
+                            Text(text = device.name, style = MaterialTheme.typography.bodyLarge)
+
+                            Text(text = device.id, style = MaterialTheme.typography.bodySmall)
+
+                        }
+
+                        IconButton(
+                            onClick = { PairedDeviceStore.remove(context, device) }
+                        ) {
+                            Icon(Icons.Default.Delete, contentDescription = "Trennen")
+                        }
 
                     }
 
