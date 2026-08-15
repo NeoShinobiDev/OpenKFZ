@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.openkfz.app.qr.PairedDeviceStore
 import com.openkfz.data.OpenKfzDatabase
 import kotlinx.coroutines.launch
 import java.io.File
@@ -39,6 +40,7 @@ fun AdminScreen(){
 
     var showResetDbDialog by remember { mutableStateOf(false) }
     var showDeleteFilesDialog by remember { mutableStateOf(false) }
+    var showRemoveDevicesDialog by remember { mutableStateOf(false) }
 
     suspend fun refreshCounts() {
         vehicleCount = dao.count()
@@ -46,8 +48,11 @@ fun AdminScreen(){
     }
 
     LaunchedEffect(Unit) {
+        PairedDeviceStore.init(context)
         refreshCounts()
     }
+
+    val deviceCount = PairedDeviceStore.devices.value.size
 
     Column {
 
@@ -65,6 +70,7 @@ fun AdminScreen(){
         Spacer(Modifier.height(8.dp))
         Text(text = "Fahrzeuge in der Datenbank: $vehicleCount")
         Text(text = "Gespeicherte Dateien: $fileCount")
+        Text(text = "Verbundene Geräte: $deviceCount")
 
         Spacer(Modifier.height(24.dp))
 
@@ -88,6 +94,15 @@ fun AdminScreen(){
             onClick = { showDeleteFilesDialog = true }
         ) {
             Text("Alle Dateien löschen")
+        }
+
+        Spacer(Modifier.height(12.dp))
+
+        Button(
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+            onClick = { showRemoveDevicesDialog = true }
+        ) {
+            Text("Alle Geräte trennen")
         }
 
     }
@@ -135,6 +150,29 @@ fun AdminScreen(){
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteFilesDialog = false }) {
+                    Text("Abbrechen")
+                }
+            }
+        )
+
+    }
+
+    if (showRemoveDevicesDialog) {
+
+        AlertDialog(
+            onDismissRequest = { showRemoveDevicesDialog = false },
+            title = { Text("Alle Geräte wirklich trennen?") },
+            text = { Text("Alle $deviceCount verbundenen Geräte werden entfernt. Sie müssen erneut per QR-Code gekoppelt werden.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    PairedDeviceStore.clearAll(context)
+                    showRemoveDevicesDialog = false
+                }) {
+                    Text("Trennen")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showRemoveDevicesDialog = false }) {
                     Text("Abbrechen")
                 }
             }

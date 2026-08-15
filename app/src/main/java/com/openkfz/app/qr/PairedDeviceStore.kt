@@ -44,6 +44,12 @@ object PairedDeviceStore {
 
     }
 
+    fun clearAll(context: Context) {
+
+        persist(context, emptyList())
+
+    }
+
     private fun persist(context: Context, updated: List<PairedDevice>) {
 
         devices.value = updated
