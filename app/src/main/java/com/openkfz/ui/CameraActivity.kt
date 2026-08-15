@@ -38,6 +38,7 @@ class CameraActivity : ComponentActivity() {
     private lateinit var settingsButton: Button
     private var imageCapture: ImageCapture? = null
     private var pendingCaptureFile: File? = null
+    private var flashMode = ImageCapture.FLASH_MODE_OFF
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -61,13 +62,15 @@ class CameraActivity : ComponentActivity() {
         frame.addView(previewView)
 
         settingsButton = Button(this)
-        settingsButton.text = "⚙"
+        settingsButton.setOnClickListener { toggleFlash() }
 
         val settingsParams = FrameLayout.LayoutParams(dp(56), dp(56))
         settingsParams.gravity = Gravity.BOTTOM or Gravity.END
         settingsParams.setMargins(0, 0, dp(16), dp(16))
 
         frame.addView(settingsButton, settingsParams)
+
+        updateFlashButtonAppearance()
 
         captureButton = Button(this)
         captureButton.text = "●"
@@ -155,6 +158,32 @@ class CameraActivity : ComponentActivity() {
 
     }
 
+    private fun toggleFlash() {
+
+        flashMode = when (flashMode) {
+            ImageCapture.FLASH_MODE_OFF -> ImageCapture.FLASH_MODE_AUTO
+            ImageCapture.FLASH_MODE_AUTO -> ImageCapture.FLASH_MODE_ON
+            else -> ImageCapture.FLASH_MODE_OFF
+        }
+
+        imageCapture?.flashMode = flashMode
+        updateFlashButtonAppearance()
+
+    }
+
+    private fun updateFlashButtonAppearance() {
+
+        val (label, color) = when (flashMode) {
+            ImageCapture.FLASH_MODE_ON -> "⚡+" to Color.parseColor("#FFC107")
+            ImageCapture.FLASH_MODE_AUTO -> "⚡A" to Color.parseColor("#2196F3")
+            else -> "⚡-" to Color.parseColor("#9E9E9E")
+        }
+
+        settingsButton.text = label
+        settingsButton.setTextColor(color)
+
+    }
+
     private fun hasCameraPermission(): Boolean {
 
         return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
@@ -174,7 +203,7 @@ class CameraActivity : ComponentActivity() {
                 it.setSurfaceProvider(previewView.surfaceProvider)
             }
 
-            val capture = ImageCapture.Builder().build()
+            val capture = ImageCapture.Builder().setFlashMode(flashMode).build()
             imageCapture = capture
 
             try {
