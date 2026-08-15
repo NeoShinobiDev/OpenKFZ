@@ -63,6 +63,7 @@ fun FileManagerScreen(){
     }
 
     var previewFile by remember { mutableStateOf<File?>(null) }
+    var fileToDelete by remember { mutableStateOf<File?>(null) }
 
     fun refresh() {
         files = documentsDir(context).listFiles()?.sortedByDescending { it.lastModified() } ?: emptyList()
@@ -137,10 +138,7 @@ fun FileManagerScreen(){
                         }
 
                         IconButton(
-                            onClick = {
-                                file.delete()
-                                refresh()
-                            }
+                            onClick = { fileToDelete = file }
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = "Löschen")
                         }
@@ -154,6 +152,30 @@ fun FileManagerScreen(){
             }
 
         }
+
+    }
+
+    fileToDelete?.let { file ->
+
+        AlertDialog(
+            onDismissRequest = { fileToDelete = null },
+            title = { Text("Datei wirklich löschen?") },
+            text = { Text("\"${file.name}\" wird unwiderruflich gelöscht.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    file.delete()
+                    refresh()
+                    fileToDelete = null
+                }) {
+                    Text("Löschen")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { fileToDelete = null }) {
+                    Text("Abbrechen")
+                }
+            }
+        )
 
     }
 

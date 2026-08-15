@@ -12,12 +12,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,6 +45,7 @@ fun DevicesScreen(){
     }
 
     var statusMessage by remember { mutableStateOf<String?>(null) }
+    var deviceToRemove by remember { mutableStateOf<PairedDevice?>(null) }
 
     val scanLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
 
@@ -139,7 +142,7 @@ fun DevicesScreen(){
                         }
 
                         IconButton(
-                            onClick = { PairedDeviceStore.remove(context, device) }
+                            onClick = { deviceToRemove = device }
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = "Trennen")
                         }
@@ -153,6 +156,29 @@ fun DevicesScreen(){
             }
 
         }
+
+    }
+
+    deviceToRemove?.let { device ->
+
+        AlertDialog(
+            onDismissRequest = { deviceToRemove = null },
+            title = { Text("Gerät wirklich trennen?") },
+            text = { Text("\"${device.name}\" wird getrennt und muss erneut per QR-Code gekoppelt werden.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    PairedDeviceStore.remove(context, device)
+                    deviceToRemove = null
+                }) {
+                    Text("Trennen")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { deviceToRemove = null }) {
+                    Text("Abbrechen")
+                }
+            }
+        )
 
     }
 
