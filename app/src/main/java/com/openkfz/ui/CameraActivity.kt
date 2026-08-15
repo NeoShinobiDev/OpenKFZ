@@ -17,7 +17,7 @@ import androidx.camera.core.ImageCapture.OutputFileOptions
 import androidx.camera.core.ImageCapture.OutputFileResults
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.openkfz.app.files.documentsDir
 import java.io.File
@@ -29,6 +29,16 @@ class CameraActivity : ComponentActivity() {
 
     private lateinit var previewView: PreviewView
     private var imageCapture: ImageCapture? = null
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            startCamera()
+        } else {
+            Toast.makeText(this, "Kamera-Berechtigung benötigt", Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,11 +78,7 @@ class CameraActivity : ComponentActivity() {
         if (hasCameraPermission()) {
             startCamera()
         } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.CAMERA),
-                CAMERA_PERMISSION_REQUEST_CODE
-            )
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
     }
@@ -84,25 +90,6 @@ class CameraActivity : ComponentActivity() {
 
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startCamera()
-            } else {
-                Toast.makeText(this, "Kamera-Berechtigung benötigt", Toast.LENGTH_LONG).show()
-            }
-
-        }
-
-    }
 
     private fun startCamera() {
 
@@ -167,8 +154,5 @@ class CameraActivity : ComponentActivity() {
 
     }
 
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 100
-    }
 
 }
