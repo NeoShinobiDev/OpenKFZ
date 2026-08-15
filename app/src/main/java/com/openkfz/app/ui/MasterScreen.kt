@@ -49,7 +49,7 @@ fun MasterScreen(){
                         Icon(Icons.Default.Home,null)
                     },
                     label = {
-                        Text("Dashboard")
+                        Text("Start")
                     }
                 )
 
@@ -75,7 +75,7 @@ fun MasterScreen(){
                         Icon(Icons.Default.Build,null)
                     },
                     label = {
-                        Text("Einstellungen")
+                        Text("Konfig")
                     }
                 )
 
@@ -101,7 +101,7 @@ fun MasterScreen(){
                         Icon(Icons.Default.Storage,null)
                     },
                     label = {
-                        Text("Datenbank")
+                        Text("Daten")
                     }
                 )
 
