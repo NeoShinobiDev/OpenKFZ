@@ -4,28 +4,64 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import com.openkfz.app.qr.PairedDevice
+import com.openkfz.app.qr.PairedDeviceStore
+import org.json.JSONObject
 
 @Composable
 fun DevicesScreen(){
 
-    var lastScan by remember { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        PairedDeviceStore.init(context)
+    }
+
+    var statusMessage by remember { mutableStateOf<String?>(null) }
 
     val scanLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
 
-        if (result.contents != null) {
-            lastScan = result.contents
+        val content = result.contents
+
+        if (content == null) {
+            return@rememberLauncherForActivityResult
+        }
+
+        try {
+
+            val json = JSONObject(content)
+
+            if (json.optString("type") != "openkfz-client") {
+                statusMessage = "Kein gültiger Client-QR-Code."
+                return@rememberLauncherForActivityResult
+            }
+
+            val id = json.getString("id")
+            val name = json.optString("name", "Unbenannter Client")
+
+            PairedDeviceStore.addOrUpdate(context, PairedDevice(id, name))
+            statusMessage = "\"$name\" verbunden."
+
+        } catch (e: Exception) {
+            statusMessage = "QR-Code konnte nicht gelesen werden."
         }
 
     }
@@ -54,20 +90,45 @@ fun DevicesScreen(){
             Text("Client scannen")
         }
 
+        statusMessage?.let {
+            Spacer(Modifier.height(8.dp))
+            Text(text = it, style = MaterialTheme.typography.bodyMedium)
+        }
+
         Spacer(Modifier.height(16.dp))
 
-        if (lastScan != null) {
+        val devices = PairedDeviceStore.devices.value
 
-            Text(
-                text = "Zuletzt gescannt:",
-                style = MaterialTheme.typography.bodyMedium
-            )
+        if (devices.isEmpty()) {
 
-            Text(text = lastScan ?: "")
+            Text("Noch keine Geräte verbunden.")
 
         } else {
 
-            Text("Noch kein Gerät gescannt.")
+            Text(
+                text = "${devices.size} verbunden(e) Gerät(e)",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            LazyColumn {
+
+                items(devices) { device ->
+
+                    Column(modifier = Modifier.padding(vertical = 8.dp)) {
+
+                        Text(text = device.name, style = MaterialTheme.typography.bodyLarge)
+
+                        Text(text = device.id, style = MaterialTheme.typography.bodySmall)
+
+                    }
+
+                    HorizontalDivider()
+
+                }
+
+            }
 
         }
 
