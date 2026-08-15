@@ -1,6 +1,5 @@
 package com.openkfz.app.ui.files
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,22 +25,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.openkfz.app.files.documentsDir
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
-private fun documentsDir(context: Context): File {
-
-    val dir = File(context.getExternalFilesDir(null), "documents")
-
-    if (!dir.exists()) {
-        dir.mkdirs()
-    }
-
-    return dir
-
-}
 
 private fun formatSize(bytes: Long): String {
 
