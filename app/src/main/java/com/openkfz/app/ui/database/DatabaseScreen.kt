@@ -2,11 +2,16 @@ package com.openkfz.app.ui.database
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,6 +48,7 @@ fun DatabaseScreen(){
     val fahrzeuge by dao.getAll().collectAsState(initial = emptyList())
 
     var statusMessage by remember { mutableStateOf<String?>(null) }
+    var fahrzeugToDelete by remember { mutableStateOf<Fahrzeug?>(null) }
 
     fun timestamp() = SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMANY).format(Date())
 
@@ -101,9 +107,22 @@ fun DatabaseScreen(){
 
                 items(fahrzeuge) { fahrzeug ->
 
-                    Text(
-                        text = "${fahrzeug.kennzeichen} — ${fahrzeug.hersteller} ${fahrzeug.modell} (${fahrzeug.baujahr})"
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Text(
+                            text = "${fahrzeug.kennzeichen} — ${fahrzeug.hersteller} ${fahrzeug.modell} (${fahrzeug.baujahr})"
+                        )
+
+                        IconButton(
+                            onClick = { fahrzeugToDelete = fahrzeug }
+                        ) {
+                            Icon(Icons.Default.Delete, contentDescription = "Löschen")
+                        }
+
+                    }
 
                 }
 
@@ -176,6 +195,31 @@ fun DatabaseScreen(){
         ){
             Text("Import Backup")
         }
+
+    }
+
+    fahrzeugToDelete?.let { fahrzeug ->
+
+        AlertDialog(
+            onDismissRequest = { fahrzeugToDelete = null },
+            title = { Text("Fahrzeug wirklich löschen?") },
+            text = { Text("\"${fahrzeug.kennzeichen} — ${fahrzeug.hersteller} ${fahrzeug.modell}\" wird unwiderruflich gelöscht.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    scope.launch {
+                        dao.delete(fahrzeug)
+                        fahrzeugToDelete = null
+                    }
+                }) {
+                    Text("Löschen")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { fahrzeugToDelete = null }) {
+                    Text("Abbrechen")
+                }
+            }
+        )
 
     }
 
