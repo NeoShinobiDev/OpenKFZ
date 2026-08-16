@@ -166,8 +166,13 @@ fun DatabaseScreen(){
             onClick = {
 
                 val file = File(documentsDir(context), "backup_${timestamp()}.json")
-                file.writeText(fahrzeuge.toJson())
-                statusMessage = "Backup gespeichert: ${file.name}"
+
+                statusMessage = try {
+                    file.writeText(fahrzeuge.toJson())
+                    "Backup gespeichert: ${file.name}"
+                } catch (e: Exception) {
+                    "Backup fehlgeschlagen: ${e.message}"
+                }
 
             }
         ){
@@ -179,8 +184,13 @@ fun DatabaseScreen(){
             onClick = {
 
                 val file = File(documentsDir(context), "export_${timestamp()}.json")
-                file.writeText(fahrzeuge.toJson())
-                statusMessage = "Export gespeichert: ${file.name}"
+
+                statusMessage = try {
+                    file.writeText(fahrzeuge.toJson())
+                    "Export gespeichert: ${file.name}"
+                } catch (e: Exception) {
+                    "Export fehlgeschlagen: ${e.message}"
+                }
 
             }
         ){

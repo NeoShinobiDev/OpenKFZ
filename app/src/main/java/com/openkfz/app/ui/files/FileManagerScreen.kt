@@ -64,6 +64,7 @@ fun FileManagerScreen(){
 
     var previewFile by remember { mutableStateOf<File?>(null) }
     var fileToDelete by remember { mutableStateOf<File?>(null) }
+    var statusMessage by remember { mutableStateOf<String?>(null) }
 
     fun refresh() {
         files = documentsDir(context).listFiles()?.sortedByDescending { it.lastModified() } ?: emptyList()
@@ -90,13 +91,22 @@ fun FileManagerScreen(){
 
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMANY)
                 val file = File(documentsDir(context), "test_${dateFormat.format(Date())}.txt")
-                file.writeText("Testdatei, erstellt am ${Date()}")
 
-                refresh()
+                try {
+                    file.writeText("Testdatei, erstellt am ${Date()}")
+                    refresh()
+                } catch (e: Exception) {
+                    statusMessage = "Erstellen fehlgeschlagen: ${e.message}"
+                }
 
             }
         ) {
             Text("Testdatei erstellen")
+        }
+
+        statusMessage?.let {
+            Spacer(Modifier.height(8.dp))
+            Text(text = it, style = MaterialTheme.typography.bodyMedium)
         }
 
         Spacer(Modifier.height(16.dp))
