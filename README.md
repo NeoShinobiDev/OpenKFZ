@@ -111,3 +111,9 @@ com.openkfz
 
 Bestehende Struktur und Package-Aufteilung bleiben bewusst so bestehen (siehe [AGENTS.md](AGENTS.md)) – keine Architekturänderung, keine Clean-Architecture-Migration.
 
+---
+
+# Lizenz
+
+OpenKFZ steht unter der [GNU Affero General Public License v3.0](LICENSE) – freie Software (FOSS).
+
