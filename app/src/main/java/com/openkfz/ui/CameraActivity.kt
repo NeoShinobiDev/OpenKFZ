@@ -260,9 +260,15 @@ class CameraActivity : ComponentActivity() {
 
     private fun showReview(file: File) {
 
-        pendingCaptureFile = file
-
         val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+
+        if (bitmap == null) {
+            file.delete()
+            Toast.makeText(this, "Aufnahme fehlgeschlagen", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        pendingCaptureFile = file
         reviewImage.setImageBitmap(bitmap)
 
         reviewOverlay.visibility = android.view.View.VISIBLE
