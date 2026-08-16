@@ -1,6 +1,7 @@
 package com.openkfz.app.qr
 
 import android.content.Context
+import android.os.Build
 import java.util.UUID
 
 
@@ -33,7 +34,7 @@ object ClientQrData {
         {
           "type":"openkfz-client",
           "id":"${getClientId(context)}",
-          "name":"OpenKFZ Client"
+          "name":"${Build.MANUFACTURER} ${Build.MODEL}"
         }
         """.trimIndent()
 
