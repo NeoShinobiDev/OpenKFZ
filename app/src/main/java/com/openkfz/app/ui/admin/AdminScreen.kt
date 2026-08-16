@@ -20,10 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.openkfz.app.files.documentsDir
 import com.openkfz.app.qr.PairedDeviceStore
 import com.openkfz.data.OpenKfzDatabase
 import kotlinx.coroutines.launch
-import java.io.File
 
 @Composable
 fun AdminScreen(){
@@ -32,8 +32,6 @@ fun AdminScreen(){
     val scope = rememberCoroutineScope()
 
     val dao = remember { OpenKfzDatabase.getInstance(context).fahrzeugDao() }
-
-    fun documentsDir() = File(context.getExternalFilesDir(null), "documents")
 
     var vehicleCount by remember { mutableIntStateOf(0) }
     var fileCount by remember { mutableIntStateOf(0) }
@@ -44,7 +42,7 @@ fun AdminScreen(){
 
     suspend fun refreshCounts() {
         vehicleCount = dao.count()
-        fileCount = documentsDir().listFiles()?.size ?: 0
+        fileCount = documentsDir(context).listFiles()?.size ?: 0
     }
 
     LaunchedEffect(Unit) {
@@ -141,7 +139,7 @@ fun AdminScreen(){
             text = { Text("Alle $fileCount gespeicherten Dateien werden unwiderruflich gelöscht.") },
             confirmButton = {
                 TextButton(onClick = {
-                    documentsDir().listFiles()?.forEach { it.delete() }
+                    documentsDir(context).listFiles()?.forEach { it.delete() }
                     scope.launch { refreshCounts() }
                     showDeleteFilesDialog = false
                 }) {
