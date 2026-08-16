@@ -226,48 +226,32 @@ Status:
 
 ## Phase 2 – UI Konzept
 
-Als nächstes:
+Status:
 
-* Startbildschirm
-* Rollen-Auswahl:
-
-  * Client
-  * Master
-
-Client UI:
-
-* Kameraansicht
-* Scan Button
-* Statusanzeige
-
-Master UI:
-
-* Dashboard
-* Geräte
-* Dokumente
-* Datenbank
-* Export
+✅ Startbildschirm mit Rollen-Auswahl (Client / Master)
+✅ Client UI: Kameraansicht, Scan Button
+✅ Master UI: Dashboard, Geräte, Dateien, Datenbank, Admin
 
 ---
 
 ## Phase 3 – Scanner
 
-Geplant:
+Status:
 
-* Kamera Integration
-* Dokumentenerkennung
-* Perspektivkorrektur
-* OCR
+✅ Kamera Integration (inkl. Foto-Vorschau und Blitz-Umschalter)
+⬜ Dokumentenerkennung
+⬜ Perspektivkorrektur
+⬜ OCR
 
 ---
 
 ## Phase 4 – Lokale Speicherung
 
-Geplant:
+Status:
 
-* SQLite Datenbank
-* PDF Speicherung
-* Dateiverwaltung
+✅ Datenbank (Room/SQLite) für Fahrzeugdaten
+✅ Dateiverwaltung (Vorschau, Löschen, Backup/Export/Import als JSON)
+⬜ PDF Speicherung
 
 ---
 
