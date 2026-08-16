@@ -43,35 +43,30 @@ Kommunikation:
 - APK Installation getestet
 - Client/Master Konzept erstellt
 - Erste Benutzeroberfläche umgesetzt
+- Kamera-Integration mit Foto-Vorschau (Übernehmen/Verwerfen) und Blitz-Umschalter
+- Geräte-Kopplung per QR-Code
+- Lokale Datenbank (Room) für Fahrzeugdaten
+- Dateiverwaltung mit Vorschau und Löschbestätigung
+- Backup, Export und Import als JSON
+- Admin-Bereich mit Systemstatus und Gefahrenzone
 
 
 ## Entwicklung 🚧
 
-- Setup Bildschirm
 - Client Scanner Oberfläche
 - Master Verwaltungsoberfläche
 
 
 ## Geplant 📋
 
-- Kamera Integration
 - automatische Dokumentenerkennung
 - OCR Engine
 - PDF Generator
-- lokale Datenbank
 - Synchronisation im Netzwerk
-- Export Funktionen
 
 ---
 
 # Screenshots 📸
-
-## Setup Bildschirm
-
-Geräteauswahl zwischen Client und Master.
-
-![Setup Screen](docs/screenshots/setup.png)
-
 
 ## Client Scanner
 
