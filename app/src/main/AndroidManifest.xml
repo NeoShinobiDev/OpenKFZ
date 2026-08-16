@@ -16,11 +16,6 @@
 
 
         <activity
-            android:name="com.openkfz.setup.SetupActivity"
-            android:exported="true"/>
-
-
-        <activity
             android:name="com.openkfz.client.ClientActivity"
             android:exported="true"/>
 
